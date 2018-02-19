@@ -10,15 +10,137 @@
  		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 
+
+#tooltip
+{
+    text-align: center;
+    color: #fff;
+    background: orange;
+    position: absolute;
+    z-index: 100;
+    padding: 15px;
 }
+ 
+    #tooltip:after /* triangle decoration */
+    {
+        background-color: orange
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #111;
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+        margin-left: -10px;
+    }
+ 
+        #tooltip.top:after
+        {
+            border-top-color: transparent;
+            border-bottom: 10px solid #111;
+            top: -20px;
+            bottom: auto;
+        }
+ 
+        #tooltip.left:after
+        {
+            left: 10px;
+            margin: 0;
+        }
+ 
+        #tooltip.right:after
+        {
+            right: 10px;
+            left: auto;
+            margin: 0;
+        }
 
 body {
     font-family: 'Coustard';font-size: 14px;
+    $( function()
+{
+    var targets = $( '[rel~=tooltip]' ),
+        target  = false,
+        tooltip = false,
+        title   = false;
+ 
+    targets.bind( 'mouseenter', function()
+    {
+        target  = $( this );
+        tip     = target.attr( 'title' );
+        tooltip = $( '<div id="tooltip"></div>' );
+ 
+        if( !tip || tip == '' )
+            return false;
+ 
+        target.removeAttr( 'title' );
+        tooltip.css( 'opacity', 0 )
+               .html( tip )
+               .appendTo( 'body' );
+ 
+        var init_tooltip = function()
+        {
+            if( $( window ).width() < tooltip.outerWidth() * 1.5 )
+                tooltip.css( 'max-width', $( window ).width() / 2 );
+            else
+                tooltip.css( 'max-width', 340 );
+ 
+            var pos_left = target.offset().left + ( target.outerWidth() / 2 ) - ( tooltip.outerWidth() / 2 ),
+                pos_top  = target.offset().top - tooltip.outerHeight() - 20;
+ 
+            if( pos_left < 0 )
+            {
+                pos_left = target.offset().left + target.outerWidth() / 2 - 20;
+                tooltip.addClass( 'left' );
+            }
+            else
+                tooltip.removeClass( 'left' );
+ 
+            if( pos_left + tooltip.outerWidth() > $( window ).width() )
+            {
+                pos_left = target.offset().left - tooltip.outerWidth() + target.outerWidth() / 2 + 20;
+                tooltip.addClass( 'right' );
+            }
+            else
+                tooltip.removeClass( 'right' );
+ 
+            if( pos_top < 0 )
+            {
+                var pos_top  = target.offset().top + target.outerHeight();
+                tooltip.addClass( 'top' );
+            }
+            else
+                tooltip.removeClass( 'top' );
+ 
+            tooltip.css( { left: pos_left, top: pos_top } )
+                   .animate( { top: '+=10', opacity: 1 }, 50 );
+        };
+ 
+        init_tooltip();
+        $( window ).resize( init_tooltip );
+ 
+        var remove_tooltip = function()
+        {
+            tooltip.animate( { top: '-=10', opacity: 0 }, 50, function()
+            {
+                $( this ).remove();
+            });
+ 
+            target.attr( 'title', tip );
+        };
+ 
+        target.bind( 'mouseleave', remove_tooltip );
+        tooltip.bind( 'click', remove_tooltip );
+    });
+});
 }
+		
 		</script>
 	</head>
 	<body>
-		
+			
 		</style>
 
 		<!-- Header -->
@@ -89,25 +211,20 @@ body {
 						</header>
 						<div class="content">
 							
-							<li style="color:red;font-size:30px" >
-								<span class="container">
-								<a data-toggle="tooltip" title="This is a team participation hackathon. You can have at most 2 members in your team.
-								You can either invite your friends to form a team or you can request other teams to add you as a member.
-								The hackathon will start at 26-11-2016 11:30 AM and end at 27-11-2016 11:30 AM, you work on your hack during the allotted time only.">Mini Hackathon</a>
+							<li style="color:red;font-size:30px"><span> <abbr title="This is a team participation hackathon. You can have at most 2 members in your team.You can either invite your friends to form a team or you can request other teams to add you as a member.The hackathon will start at 26-11-2016 11:30 AM and end at 27-11-2016 11:30 AM, you work on your hack during the allotted time only." rel="tooltip">Mini Hackathon</abbr> <span</li>
+								
 							</span>
 						</li>
-							<li style="color:darkred;font-size:30px" >
-								<span class="container">
-								<a data-toggle="tooltip" title="Each team has shall consist of a maximum of 2 persons.
-								the decision of the quiz aster will be final and will not be up for debate.
-								scrap or rought sheets and pencil can be carried by participants
-								points are cumulative ">Tech Quiz</a>
-								</span> 
+							<li style="color:red;font-size:30px"><span> <abbr title="Each team has shall consist of a maximum of 2 persons.The decision of the quiz aster will be final and will not be up for debate.Scrap or rought sheets and pencil can be carried by participants.Points are cumulative " rel="tooltip">Tech Quiz</abbr> </li>
 
-							</li>
-							<li style="color:red;font-size:30px">Ideate </li>
-							<li style="color:red;font-size:30px">Paper Presentation </li>
-							<li style="color:red;font-size:30px">Jumble Code </li>
+							<li style="color:red;font-size:30px"><span> <abbr title="Ideation is the mode of the design process in which you concentrate on idea generation. Mentally it represents a process of ‘going wide’ in terms of concepts and outcomes. Ideation provides both the fuel and also the source material for building prototypes and getting innovative solutions into the hands of your users." rel="tooltip">Ideate</abbr> </li>
+							<li style="color:red;font-size:30px"><span> <abbr title="Maximum number of participants in a Team is 2.
+							Abstract should not exceed 1 page and Paper should not exceed 15 pages. 
+							The subject of the mail with the attached abstract and later, the final paper should be the domain and sub-category under which the paper is categorized." rel="tooltip">Paper Presentation</abbr> </li>
+							<li style="color:red;font-size:30px"><span> <abbr title="a jumbled set of a c program will be given to the participant.
+							the participant must rearrange the statements in order to generate logically anfd syntactically correct program.
+							judges decision will be final and no debates will be encouraged
+							the event coordinator holds the authority to change the rules at any point of time">Jumble Code</abbr> </li>
 						</div>
 						<footer>
 							<a href="technical.html" class="button alt">Learn More</a>
@@ -211,6 +328,7 @@ body {
 				</div>
 			</footer>
 		<!-- Scripts -->
+			
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>

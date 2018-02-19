@@ -229,6 +229,17 @@
 		}
 
 	}
+	#tooltip
+{
+    text-align: center;
+    color: #fff;
+    background: orange;
+    position: absolute;
+    z-index: 100;
+    padding: 15px;
+}
+ 
+   
 
 /* Grid */
 
