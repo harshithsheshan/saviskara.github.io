@@ -3363,7 +3363,7 @@
 
 		#header.alt {
 			top: 0;
-			background: #F64747;
+			background: #ff9900;
 		}
 
 		#header .logo {
@@ -3379,7 +3379,7 @@
 
 			#header .logo a {
 				font-size: 1.25em;
-				color: #FF8C00;
+				color: black;
 				font-weight: 600;
 				text-decoration: none;
 			}
